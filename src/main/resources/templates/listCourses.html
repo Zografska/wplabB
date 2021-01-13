@@ -1,0 +1,67 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Welcome and Choose a Course</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Courses List</h1>
+    <div>
+        <ul>
+            <li th:each="course:${courses}">
+                <th:block th:text="${course.getName()}"/>,
+                <th:block th:text="${course.getDescription()}"/>
+                <th:block>
+                    <form th:action="@{'/courses/delete/{id}' (id=${course.getCourseId()})}"
+                          th:method="DELETE">
+                        <button type="submit"
+                                class="btn btn-sm btn-danger delete-product">
+                            <i class="fa fa-trash">Delete</i>
+                        </button>
+                    </form>
+
+                </th:block>
+                <th:block>
+                    <form th:action="@{'/courses/details/{id}'  (id=${course.getCourseId()})}"
+                          th:method="GET">
+                        <input name="id" type="hidden" th:value="${course.getCourseId()}">
+                        <input type="submit" th:text="Details" >
+                    </form>
+
+                </th:block>
+            </li>
+        </ul>
+    </div>
+</header>
+<main>
+    <h2>Choose course:</h2>
+    <form th:action="@{/addStudent}" th:method="POST" >
+    <select name="course">
+        <option th:each="course:${courses}" th:text="${course.getName()}" th:value="${course.getCourseId()}"></option>
+    </select>
+    <button type="submit">Submit</button>
+    </form>
+
+    <h2>Choose course:</h2>
+    <form th:action="@{'/courses/add'}" th:method="POST" >
+        <input name="name">
+        <input name="description">
+        <select name="teacherId" class="form-control">
+            <option
+                    th:each="teach : ${teachers}"
+                    th:value="${teach.getId()}"
+                    th:text="${teach.getName()}">
+            </option>
+        </select>
+
+        <button type="submit">Submit</button>
+    </form>
+</main>
+</body>
+</html>
